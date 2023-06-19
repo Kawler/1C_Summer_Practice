@@ -12,7 +12,7 @@ class MyXAxis(): ValueFormatter(){
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
         val conv: Long = value.toLong() * 1000
         val timeMil = Date(conv)
-        val df = SimpleDateFormat("MM/yyyy", Locale.ENGLISH)
+        val df = SimpleDateFormat("MM/yy", Locale.ENGLISH)
         return df.format(timeMil)
     }
 }

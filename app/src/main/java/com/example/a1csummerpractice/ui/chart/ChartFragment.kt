@@ -42,7 +42,7 @@ class ChartFragment : Fragment() {
         chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         chart.xAxis.valueFormatter = MyXAxis()
 
-        val lineDataSet: LineDataSet = LineDataSet(jsonDT?.let { jsonToEntry(it) },"Dt 1")
+        val lineDataSet: LineDataSet = LineDataSet(jsonDT?.let { jsonToEntry(it) },"Динамика изменения суммы начислений")
         val dataSets: MutableList<ILineDataSet> = arrayListOf()
         dataSets.add(lineDataSet)
         val data: LineData = LineData(dataSets)
