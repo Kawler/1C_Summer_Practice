@@ -1,4 +1,4 @@
-package com.example.a1csummerpractice.ui.gallery
+package com.example.a1csummerpractice.ui.chart
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

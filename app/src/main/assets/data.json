@@ -1,0 +1,128 @@
+{
+  "calculations": [
+    {
+      "culc_type": "main",
+      "culc_name": "Основная квитанция",
+      "items": [
+        {
+          "id": "8038",
+          "date": 1677618000,
+          "additional_period": "N",
+          "start_amount": 9865.21,
+          "end_amount": 9865.21,
+          "calculated": 0,
+          "payed": 0,
+          "penalties": 0,
+          "upload_time": 2023,
+          "last_payment_date": 1576357200,
+          "currentDate": 1686258000,
+          "correction": 0
+        },
+        {
+          "id": "7960",
+          "date": 1675198800,
+          "additional_period": "N",
+          "start_amount": 9865.21,
+          "end_amount": 9865.21,
+          "calculated": 0,
+          "payed": 0,
+          "penalties": 0,
+          "upload_time": 2023,
+          "last_payment_date": 1576357200,
+          "currentDate": 1686258000,
+          "correction": 0
+        },
+        {
+          "id": "7956",
+          "date": 1672520400,
+          "additional_period": "N",
+          "start_amount": 5655.04,
+          "end_amount": 5655.04,
+          "calculated": 0,
+          "payed": 0,
+          "penalties": 0,
+          "upload_time": 2023,
+          "last_payment_date": 1576357200,
+          "currentDate": 1686258000,
+          "correction": 0
+        },
+        {
+          "id": "7958",
+          "date": 1669842000,
+          "additional_period": "N",
+          "start_amount": 5655.04,
+          "end_amount": 9865.21,
+          "calculated": 4210.17,
+          "payed": 0,
+          "penalties": 0,
+          "upload_time": 2023,
+          "last_payment_date": 1576357200,
+          "currentDate": 1686258000,
+          "correction": 0
+        }
+      ]
+    },
+    {
+      "culc_type": "overhaul",
+      "culc_name": "Капремонт",
+      "items": [
+        {
+          "id": "8039",
+          "date": 1677618000,
+          "additional_period": "N",
+          "start_amount": 3223.99,
+          "end_amount": 3223.99,
+          "calculated": 0,
+          "payed": 0,
+          "penalties": 0,
+          "upload_time": 2023,
+          "last_payment_date": 1575925200,
+          "currentDate": 1686258000,
+          "correction": 0
+        },
+        {
+          "id": "7961",
+          "date": 1675198800,
+          "additional_period": "N",
+          "start_amount": 3223.99,
+          "end_amount": 3223.99,
+          "calculated": 0,
+          "payed": 0,
+          "penalties": 0,
+          "upload_time": 2023,
+          "last_payment_date": 1575925200,
+          "currentDate": 1686258000,
+          "correction": 0
+        },
+        {
+          "id": "7957",
+          "date": 1672520400,
+          "additional_period": "N",
+          "start_amount": 2089.99,
+          "end_amount": 2089.99,
+          "calculated": 0,
+          "payed": 0,
+          "penalties": 0,
+          "upload_time": 2023,
+          "last_payment_date": 1575925200,
+          "currentDate": 1686258000,
+          "correction": 0
+        },
+        {
+          "id": "7959",
+          "date": 1669842000,
+          "additional_period": "N",
+          "start_amount": 2089.99,
+          "end_amount": 3223.99,
+          "calculated": 1134,
+          "payed": 0,
+          "penalties": 0,
+          "upload_time": 2023,
+          "last_payment_date": 1575925200,
+          "currentDate": 1686258000,
+          "correction": 0
+        }
+      ]
+    }
+  ]
+}

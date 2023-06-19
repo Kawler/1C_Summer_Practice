@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/nav_chart"
-        android:name="com.example.a1csummerpractice.ui.gallery.ChartFragment"
+        android:name="com.example.a1csummerpractice.ui.chart.ChartFragment"
         android:label="@string/menu_chart"
         tools:layout="@layout/fragment_chart" />
 
     <fragment
         android:id="@+id/nav_info"
-        android:name="com.example.a1csummerpractice.ui.slideshow.InfoFragment"
+        android:name="com.example.a1csummerpractice.ui.info.InfoFragment"
         android:label="@string/menu_info"
         tools:layout="@layout/fragment_info" />
 </navigation>
