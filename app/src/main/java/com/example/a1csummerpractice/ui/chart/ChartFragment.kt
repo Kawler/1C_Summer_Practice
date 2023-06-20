@@ -44,6 +44,7 @@ class ChartFragment : Fragment() {
         val rvMain: RecyclerView = binding.rvChartMain
         val rvCap: RecyclerView = binding.rvChartCap
 
+        //Pass jsonDT to be parsed and set custom xAxis formatter
         val jsonDT = context?.let { jsonMapper(context = it) }
         chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         chart.xAxis.valueFormatter = MyXAxis()
@@ -51,26 +52,29 @@ class ChartFragment : Fragment() {
         //LineDataSet styling
         val lineDataSet: LineDataSet = LineDataSet(jsonDT?.let { jsonToEntry(it) },"Динамика изменения суммы начислений")
         lineDataSet.lineWidth = 6F
-        lineDataSet.color = R.color.purple_500
+        lineDataSet.color = R.color.light_cyan
         lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-        lineDataSet.setCircleColor(Color.BLUE)
+        lineDataSet.setCircleColor(R.color.dark_cyan)
         lineDataSet.setDrawFilled(true)
-        lineDataSet.fillColor = R.color.purple_500
-        lineDataSet.fillAlpha = 190
+        lineDataSet.fillColor = R.color.dark_cyan
+        lineDataSet.fillAlpha = 70
         lineDataSet.circleRadius = 7f
         lineDataSet.valueTextSize = 10f
 
+        //Adding data to chart
         val dataSets: MutableList<ILineDataSet> = arrayListOf()
         dataSets.add(lineDataSet)
         val data: LineData = LineData(dataSets)
         chart.data = data
         chart.invalidate()
 
+        //Assigning adapters
         _mainAdapter = CalcAdapter()
         _mainAdapter.data = jsonDT!!.calculations.get(0).items
         _capAdapter = CalcAdapter()
         _capAdapter.data = jsonDT.calculations.get(1).items
 
+        //Binding to RVs
         val layManagerMain = LinearLayoutManager(context)
         val layManagerCap = LinearLayoutManager(context)
         rvMain.layoutManager = layManagerMain
