@@ -1,6 +1,5 @@
 package com.example.a1csummerpractice.ui.chart
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +51,7 @@ class ChartFragment : Fragment() {
         //LineDataSet styling
         val lineDataSet: LineDataSet = LineDataSet(jsonDT?.let { jsonToEntry(it) },"Динамика изменения суммы начислений")
         lineDataSet.lineWidth = 6F
+        lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         lineDataSet.color = R.color.light_cyan
         lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         lineDataSet.setCircleColor(R.color.dark_cyan)

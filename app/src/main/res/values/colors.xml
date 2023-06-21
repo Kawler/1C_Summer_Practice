@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_cyan">#26b7d4</color>
     <color name="dark_cyan">#187587</color>
-    <color name="background_cyan">#d2fbfc</color>
+    <color name="background_cyan">#E4FBFB</color>
+    <color name="toolbar_cyan">#75D3D3</color>
 </resources>

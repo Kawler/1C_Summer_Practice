@@ -1,4 +1,4 @@
-package com.example.a1csummerpractice.domain.dtypes
+package com.example.a1csummerpractice.domain.jsondt
 
 import com.squareup.moshi.JsonClass
 
