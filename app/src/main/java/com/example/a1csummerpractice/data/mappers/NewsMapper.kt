@@ -6,16 +6,18 @@ import com.example.a1csummerpractice.domain.newsdt.NewsData
 import com.example.a1csummerpractice.domain.newsdt.NewsItemData
 
 
-fun NewsDataDto.toNewsDataMap(): NewsData{
+fun NewsDataDto.toNewsDataMap(): NewsData? {
     val data: MutableList<NewsItemData> = mutableListOf()
-    for (item in news){
-        data.add(item.toNewsItemDataMap())
+    if (news != null) {
+        for (item in news) {
+            data.add(item.toNewsItemDataMap())
+        }
     }
     return NewsData(news = data, count = count, error_msg = error_msg)
 
 }
 
-fun NewsItemDto.toNewsItemDataMap(): NewsItemData{
+fun NewsItemDto.toNewsItemDataMap(): NewsItemData {
     return NewsItemData(
         id = id,
         title = title,

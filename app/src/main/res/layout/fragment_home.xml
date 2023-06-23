@@ -12,23 +12,71 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:elevation="0dp"
         android:background="@color/background_cyan">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/ctb_home"
             android:layout_marginTop="10dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            app:elevation="0dp"
+            android:layout_height="35dp"
             android:background="@color/background_cyan"
-            app:layout_scrollFlags="scroll">
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tb_home"
+                android:elevation="0dp"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:background="@drawable/home_toolbar"
                 app:popupTheme="@color/white"
                 app:layout_collapseMode="pin">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Месяц"
+                        android:layout_marginEnd="5dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center_vertical"/>
+                    <Spinner
+                        android:id="@+id/home_tb_spinner_month"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/toolbar_spinner"
+                        android:spinnerMode="dropdown"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Год"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center_vertical"/>
+                    <Spinner
+                        android:id="@+id/home_tb_spinner_year"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/toolbar_spinner"
+                        android:spinnerMode="dropdown"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp" />
+                    <Button
+                        android:id="@+id/home_tb_reload_btn"
+                        android:layout_marginStart="15dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/ic_tb_reload_btn" />
+                </LinearLayout>
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -39,11 +87,29 @@
         android:id="@+id/home_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_home_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        android:layout_gravity="center"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_home"
+        android:layout_gravity="top|end"
+        android:layout_width="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_fab_btn_home"
+        app:fabCustomSize="30dp"
+        android:contentDescription="open toolbar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

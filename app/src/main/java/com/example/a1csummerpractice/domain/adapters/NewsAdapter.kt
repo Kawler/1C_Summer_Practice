@@ -28,11 +28,12 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     override fun getItemCount(): Int = data.size
 
+    //Заполняет список новостей
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = data[position]
         val context = holder.itemView.context
 
-        with(holder.binding){
+        with(holder.binding) {
             rvNewsTitle.text = item.title
             rvNewsImg.load(item.img)
             rvNewsAnnotation.text = item.annotation

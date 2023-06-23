@@ -8,8 +8,10 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:elevation="0dp"
         android:background="@color/background_cyan"
         android:theme="@style/Theme.1CSummerPractice.AppBarOverlay">
 
@@ -18,7 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/app_bar"
-            app:popupTheme="@style/Theme.1CSummerPractice.PopupOverlay" />
+            app:elevation="0dp"
+            app:popupTheme="@style/Theme.1CSummerPractice.PopupOverlay">
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

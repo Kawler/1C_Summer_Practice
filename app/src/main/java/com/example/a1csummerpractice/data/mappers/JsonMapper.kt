@@ -8,6 +8,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
+//Конвертер Json
 @OptIn(ExperimentalStdlibApi::class)
 fun jsonMapper(context: Context): JsonDT? {
     val jsonString = context.assets.open("data.json").bufferedReader().use { it.readText() }
@@ -18,6 +19,7 @@ fun jsonMapper(context: Context): JsonDT? {
     return jsonAdapter.fromJson(jsonString)
 }
 
+//Конвертирует данные и заполняет график
 fun jsonToEntry(jsonDT: JsonDT): MutableList<Entry> {
     val entries: MutableList<Entry> = arrayListOf()
     //Даты для оси x

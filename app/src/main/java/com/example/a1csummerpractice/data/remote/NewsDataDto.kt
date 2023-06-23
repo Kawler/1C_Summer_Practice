@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class NewsDataDto(
-    val news: List<NewsItemDto>,
+    val news: List<NewsItemDto>?,
     val count: Int,
     val error_msg: String
 )

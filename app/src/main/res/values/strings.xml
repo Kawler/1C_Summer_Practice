@@ -12,4 +12,28 @@
     <string name="menu_info">О проекте</string>
 
     <string name="git_repo">https://github.com/Kawler/</string>
+
+    <string-array name="spinner_months">
+        <item>" "</item>
+        <item>Январь</item>
+        <item>Ферваль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+    <string-array name="spinner_years">
+        <item>" "</item>
+        <item>2020</item>
+        <item>2021</item>
+        <item>2022</item>
+        <item>2023</item>
+    </string-array>
+
 </resources>

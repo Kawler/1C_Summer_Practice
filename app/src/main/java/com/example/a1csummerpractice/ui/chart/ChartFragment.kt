@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a1csummerpractice.R
-import com.example.a1csummerpractice.data.mappers.MyXAxis
+import com.example.a1csummerpractice.domain.adapters.MyXAxis
 import com.example.a1csummerpractice.data.mappers.jsonMapper
 import com.example.a1csummerpractice.data.mappers.jsonToEntry
 import com.example.a1csummerpractice.databinding.FragmentChartBinding
@@ -25,9 +25,6 @@ class ChartFragment : Fragment() {
     private var _binding: FragmentChartBinding? = null
     private lateinit var _mainAdapter: CalcAdapter
     private lateinit var _capAdapter: CalcAdapter
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -43,13 +40,14 @@ class ChartFragment : Fragment() {
         val rvMain: RecyclerView = binding.rvChartMain
         val rvCap: RecyclerView = binding.rvChartCap
 
-        //Pass jsonDT to be parsed and set custom xAxis formatter
+        //Парсим Json и устанавливаем форматер для X оси
         val jsonDT = context?.let { jsonMapper(context = it) }
         chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         chart.xAxis.valueFormatter = MyXAxis()
 
-        //LineDataSet styling
-        val lineDataSet: LineDataSet = LineDataSet(jsonDT?.let { jsonToEntry(it) },"Динамика изменения суммы начислений")
+        //Стиль для графика
+        val lineDataSet: LineDataSet =
+            LineDataSet(jsonDT?.let { jsonToEntry(it) }, "Динамика изменения суммы начислений")
         lineDataSet.lineWidth = 6F
         lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         lineDataSet.color = R.color.light_cyan
@@ -61,20 +59,20 @@ class ChartFragment : Fragment() {
         lineDataSet.circleRadius = 7f
         lineDataSet.valueTextSize = 10f
 
-        //Adding data to chart
+        //Добавляем датасет
         val dataSets: MutableList<ILineDataSet> = arrayListOf()
         dataSets.add(lineDataSet)
         val data: LineData = LineData(dataSets)
         chart.data = data
         chart.invalidate()
 
-        //Assigning adapters
+        //Прикреаляем адаптеры
         _mainAdapter = CalcAdapter()
         _mainAdapter.data = jsonDT!!.calculations.get(0).items
         _capAdapter = CalcAdapter()
         _capAdapter.data = jsonDT.calculations.get(1).items
 
-        //Binding to RVs
+        //Связываем со списками
         val layManagerMain = LinearLayoutManager(context)
         val layManagerCap = LinearLayoutManager(context)
         rvMain.layoutManager = layManagerMain

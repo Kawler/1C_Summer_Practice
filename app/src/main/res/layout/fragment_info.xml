@@ -7,16 +7,74 @@
     android:background="@color/background_cyan">
 
     <TextView
-        android:id="@+id/text_slideshow"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_info_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:text="Информация о проекте"
+        android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_info_p_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:text="Проект для летней практики, поэтому содержит некоторое количество ошибок,
+недочётов, оригинальных решений и так далее."
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_info_title" />
+
+    <TextView
+        android:id="@+id/tv_info_p_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:text="Для получения данных с API использовалась библиотека Retorfit
+, для парсинга полученного результата, а так же Json файла использовалась библиотека Moshi. Для
+отображения и получение картинок из сети использовалась библиотека Coil. А для построения графика
+использовалась библиотека MPAndroidChart"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_info_p_1" />
+
+    <TextView
+        android:id="@+id/tv_info_p_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Приложение способно получать новости с API, сортировать их
+а так же строить график по заранее заданому формату Json файла"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_info_p_2" />
+
+    <TextView
+        android:id="@+id/tv_info_p_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Github: https://github.com/Kawler/1C_Summer_Practice"
+        android:autoLink="web"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_info_p_3" />
 </androidx.constraintlayout.widget.ConstraintLayout>
