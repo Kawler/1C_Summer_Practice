@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.1CSummerPractice" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/dark_cyan</item>
+        <item name="colorPrimary">@color/background_cyan</item>
         <item name="colorOnPrimary">@color/dark_cyan</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/dark_cyan</item>

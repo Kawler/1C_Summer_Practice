@@ -75,7 +75,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/ic_tb_reload_btn" />
+                        android:background="@drawable/ic_tb_reload_btn"
+                        android:backgroundTint="@color/toolbar_cyan"/>
                 </LinearLayout>
 
             </androidx.appcompat.widget.Toolbar>
