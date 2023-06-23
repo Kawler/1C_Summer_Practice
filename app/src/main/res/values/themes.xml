@@ -29,10 +29,8 @@
     </style>
 
     <style name="splashScreen" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/app_launcher</item>
-        <item name="android:windowSplashScreenBackground">@color/light_cyan</item>
-        <item name="android:windowBackground">@color/light_cyan</item>
-        <item name="android:windowSplashScreenIconBackgroundColor">@color/light_cyan</item>
+        <item name="android:windowBackground">@drawable/app_launcher</item>
+        <item name="android:statusBarColor">@color/light_cyan</item>
     </style>
 
 </resources>

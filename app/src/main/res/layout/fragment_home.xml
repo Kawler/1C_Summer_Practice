@@ -51,7 +51,7 @@
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/toolbar_spinner"
                         android:spinnerMode="dropdown"
-                        android:layout_width="100dp"
+                        android:layout_width="90dp"
                         android:layout_height="30dp" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -67,11 +67,11 @@
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/toolbar_spinner"
                         android:spinnerMode="dropdown"
-                        android:layout_width="100dp"
+                        android:layout_width="90dp"
                         android:layout_height="30dp" />
                     <Button
                         android:id="@+id/home_tb_reload_btn"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="5dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
