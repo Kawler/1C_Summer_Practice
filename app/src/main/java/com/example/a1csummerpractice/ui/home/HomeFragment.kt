@@ -10,18 +10,25 @@ import android.widget.Button
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a1csummerpractice.R
+import com.example.a1csummerpractice.data.NewsDatabase
 import com.example.a1csummerpractice.data.repository.NewsRepository
+import com.example.a1csummerpractice.data.repository.NewsRoomRepository
 import com.example.a1csummerpractice.databinding.FragmentHomeBinding
 import com.example.a1csummerpractice.domain.adapters.NewsAdapter
 import com.example.a1csummerpractice.domain.newsdt.NewsData
 import com.example.a1csummerpractice.domain.newsdt.NewsItemData
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.Instant
 import java.time.ZoneId
@@ -50,6 +57,15 @@ class HomeFragment : Fragment() {
         val tvStatus: TextView = binding.tvHomeStatus
         val toolbar = binding.appBarLayout
         val fab: FloatingActionButton = binding.fabHome
+        val newsDao = NewsDatabase.getDatabase(requireContext()).dao()
+        var roomData: List<NewsItemData> = listOf()
+        lateinit var roomRepository: NewsRoomRepository
+
+        //Берём данные из Бд, пока на всякий случай
+        lifecycleScope.launch(Dispatchers.IO) {
+            roomRepository = NewsRoomRepository(newsDao)
+            roomData = roomRepository.readAllData
+        }
 
         //Управление кнопкой в зависимости от прокрутки тулбара
         toolbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener(
@@ -91,19 +107,33 @@ class HomeFragment : Fragment() {
         runBlocking {
             try {
                 newsData = newsRepository.getNewsData()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    roomRepository.deleteAllNews()
+                    for (item in newsData!!.news!!){
+                        roomRepository.insertNews(item)
+                    }
+                }
             } catch (e: Exception) {
                 newsData = null
-                tvStatus.text = "Сервис новостей не отвечает"
+                if (roomData == null) {
+                    tvStatus.text = "Сервис новостей не отвечает"
+                    tvStatus.visibility = View.VISIBLE
+                } else {
+                    //Если есть сохраннёные новости, то они отобразятся
+                    newsData = NewsData(roomData, count = 0, error_msg = "")
+                    Toast.makeText(context, "Загруженны сохранённые новости", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
-
         }
 
-        if (newsData != null)
-            if (newsData!!.count == 0) {
+        if (newsData != null) {
+            if (newsData!!.news?.isEmpty() == true) {
                 Log.i("API Error mesage", newsData!!.error_msg)
                 tvStatus.text = "Не удалось получить новости"
                 tvStatus.visibility = View.VISIBLE
             }
+        }
 
         //Заполнение списка новостей
         val layManager = LinearLayoutManager(context)
@@ -116,15 +146,19 @@ class HomeFragment : Fragment() {
         rvNews.adapter = _newsAdapter
 
         //Логика работы кнопки в тулбаре - обновление и сортировка данных
+        //Хочу добавить отдельную кнопку для сортировки, но сейчас ночь
         tbBtn.setOnClickListener {
             tvStatus.visibility = View.INVISIBLE
             runBlocking {
-                try {
-                    newsData = newsRepository.getNewsData()
-                } catch (e: Exception) {
-                    newsData = null
+                newsData = null
+                if (roomData == null) {
                     tvStatus.text = "Сервис новостей не отвечает"
                     tvStatus.visibility = View.VISIBLE
+                } else {
+                    //Если есть сохраннёные новости, то они отобразятся
+                    newsData = NewsData(roomData, count = 0, error_msg = "")
+                    Toast.makeText(context, "Загруженны сохранённые новости", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
             if (newsData != null && newsData!!.news != null) {

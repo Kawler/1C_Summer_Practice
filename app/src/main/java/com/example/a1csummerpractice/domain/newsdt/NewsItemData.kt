@@ -1,8 +1,11 @@
 package com.example.a1csummerpractice.domain.newsdt
 
-import java.util.Date
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "news_table")
 data class NewsItemData(
+    @PrimaryKey(autoGenerate = true) val roomId: Int = 0,
     val id: Int,
     val title: String,
     val img: String,

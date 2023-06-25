@@ -31,3 +31,4 @@ fun NewsItemDto.toNewsItemDataMap(): NewsItemData {
         mobile_url = mobile_url
     )
 }
+
