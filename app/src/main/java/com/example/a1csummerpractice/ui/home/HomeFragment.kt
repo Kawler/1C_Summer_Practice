@@ -120,6 +120,7 @@ class HomeFragment : Fragment() {
                     tvStatus.visibility = View.VISIBLE
                 } else {
                     //Если есть сохраннёные новости, то они отобразятся
+                    tvStatus.visibility = View.GONE
                     newsData = NewsData(roomData, count = 0, error_msg = "")
                     Toast.makeText(context, "Загруженны сохранённые новости", Toast.LENGTH_SHORT)
                         .show()
@@ -155,6 +156,7 @@ class HomeFragment : Fragment() {
                     tvStatus.text = "Сервис новостей не отвечает"
                     tvStatus.visibility = View.VISIBLE
                 } else {
+                    tvStatus.visibility = View.GONE
                     //Если есть сохраннёные новости, то они отобразятся
                     newsData = NewsData(roomData, count = 0, error_msg = "")
                     Toast.makeText(context, "Загруженны сохранённые новости", Toast.LENGTH_SHORT)
