@@ -76,17 +76,16 @@
                         android:layout_marginStart="10dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:foregroundTint="@color/white"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/ic_home_sort"
-                        android:backgroundTint="@color/toolbar_cyan"/>
+                        android:background="@drawable/ic_home_sort"/>
                     <Button
                         android:id="@+id/home_tb_reload_btn"
                         android:layout_marginStart="10dp"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/ic_tb_reload_btn"
-                        android:backgroundTint="@color/toolbar_cyan"/>
+                        android:background="@drawable/ic_tb_reload_btn"/>
                 </LinearLayout>
 
             </androidx.appcompat.widget.Toolbar>

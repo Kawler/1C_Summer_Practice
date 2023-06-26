@@ -2,15 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.1CSummerPractice" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/background_cyan</item>
-        <item name="colorOnPrimary">@color/dark_cyan</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/dark_cyan</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">@color/light_cyan</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/light_cyan</item>
-        <!-- Customize your theme here. -->
         <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>
