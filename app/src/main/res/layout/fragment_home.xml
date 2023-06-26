@@ -52,6 +52,7 @@
                         android:background="@drawable/toolbar_spinner"
                         android:spinnerMode="dropdown"
                         android:layout_width="80dp"
+                        android:popupBackground="@color/background_cyan"
                         android:layout_height="30dp" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -67,6 +68,7 @@
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/toolbar_spinner"
                         android:spinnerMode="dropdown"
+                        android:popupBackground="@color/background_cyan"
                         android:layout_width="80dp"
                         android:layout_height="30dp" />
                     <Button

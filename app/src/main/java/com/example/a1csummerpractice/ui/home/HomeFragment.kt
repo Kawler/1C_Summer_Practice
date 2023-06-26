@@ -177,6 +177,8 @@ class HomeFragment : Fragment() {
                         _newsAdapter.notifyDataSetChanged()
                     }
                 }
+                tbSpinnerM.setSelection(0)
+                tbSpinnerY.setSelection(0)
             }
         }
 
