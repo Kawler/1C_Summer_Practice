@@ -65,21 +65,6 @@ class HomeFragment : Fragment() {
         var roomData: List<NewsItemData> = listOf()
         lateinit var roomRepository: NewsRoomRepository
 
-        //Изменить цвет выбраного итема в спиннере
-        val listener: AdapterView.OnItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View,
-                    position: Int,
-                    id: Long
-                ) {
-                    (parent.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.black))
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-
         //Берём данные из Бд, пока на всякий случай
         lifecycleScope.launch(Dispatchers.IO) {
             roomRepository = NewsRoomRepository(newsDao)
@@ -124,6 +109,21 @@ class HomeFragment : Fragment() {
             tbSpinnerY.adapter = adapter
         }
 
+        //Изменить цвет выбраного итема в спиннере
+        val listener: AdapterView.OnItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (view != null)
+                        (parent.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.black))
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
         tbSpinnerM.onItemSelectedListener = listener
         tbSpinnerY.onItemSelectedListener = listener
 
