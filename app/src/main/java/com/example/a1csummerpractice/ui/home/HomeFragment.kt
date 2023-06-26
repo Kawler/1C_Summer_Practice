@@ -188,6 +188,8 @@ class HomeFragment : Fragment() {
                 if (newData.isEmpty()) {
                     tvStatus.text = "Нет новостей за выбранный период"
                     tvStatus.visibility = View.VISIBLE
+                } else {
+                    tvStatus.visibility = View.GONE
                 }
                 _newsAdapter.data = newData
                 _newsAdapter.notifyDataSetChanged()
