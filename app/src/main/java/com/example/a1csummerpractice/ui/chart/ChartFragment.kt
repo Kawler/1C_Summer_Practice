@@ -64,6 +64,7 @@ class ChartFragment : Fragment() {
         dataSets.add(lineDataSet)
         val data: LineData = LineData(dataSets)
         chart.data = data
+        chart.description.isEnabled = false
         chart.invalidate()
 
         //Прикреаляем адаптеры
