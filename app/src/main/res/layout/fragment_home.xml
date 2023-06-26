@@ -118,6 +118,7 @@
         android:layout_marginEnd="10dp"
         android:layout_height="30dp"
         android:src="@drawable/ic_fab_btn_home"
+        android:backgroundTint="@color/toolbar_cyan"
         app:fabCustomSize="30dp"
         android:contentDescription="open toolbar" />
 
