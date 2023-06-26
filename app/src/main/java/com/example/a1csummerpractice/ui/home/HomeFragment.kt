@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -32,6 +33,7 @@ import kotlinx.coroutines.runBlocking
 import java.time.Instant
 import java.time.ZoneId
 import kotlin.math.abs
+
 
 class HomeFragment : Fragment() {
 
@@ -62,6 +64,21 @@ class HomeFragment : Fragment() {
         val newsDao = NewsDatabase.getDatabase(requireContext()).dao()
         var roomData: List<NewsItemData> = listOf()
         lateinit var roomRepository: NewsRoomRepository
+
+        //Изменить цвет выбраного итема в спиннере
+        val listener: AdapterView.OnItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    (parent.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.black))
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
 
         //Берём данные из Бд, пока на всякий случай
         lifecycleScope.launch(Dispatchers.IO) {
@@ -94,14 +111,21 @@ class HomeFragment : Fragment() {
             requireContext(),
             R.array.spinner_months,
             android.R.layout.simple_spinner_item
-        )
+        ).also { adapter ->
+            adapter.setDropDownViewResource(R.layout.home_dropdown_spinner_menu)
+            tbSpinnerM.adapter = adapter
+        }
         val spinYAdapter: SpinnerAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.spinner_years,
             android.R.layout.simple_spinner_item
-        )
-        tbSpinnerM.adapter = spinMAdapter
-        tbSpinnerY.adapter = spinYAdapter
+        ).also { adapter ->
+            adapter.setDropDownViewResource(R.layout.home_dropdown_spinner_menu)
+            tbSpinnerY.adapter = adapter
+        }
+
+        tbSpinnerM.onItemSelectedListener = listener
+        tbSpinnerY.onItemSelectedListener = listener
 
         //Получение новостей
         var newsData: NewsData?
@@ -111,7 +135,7 @@ class HomeFragment : Fragment() {
                 newsData = newsRepository.getNewsData()
                 lifecycleScope.launch(Dispatchers.IO) {
                     roomRepository.deleteAllNews()
-                    for (item in newsData!!.news!!){
+                    for (item in newsData!!.news!!) {
                         roomRepository.insertNews(item)
                     }
                 }
@@ -145,9 +169,9 @@ class HomeFragment : Fragment() {
             if (newsData!!.news != null)
                 _newsAdapter.data = newsData!!.news!!
 
+
         rvNews.layoutManager = layManager
         rvNews.adapter = _newsAdapter
-
         //Логика работы кнопок в тулбаре - обновление данных
         tbReloadBtn.setOnClickListener {
             tvStatus.visibility = View.INVISIBLE
@@ -156,7 +180,7 @@ class HomeFragment : Fragment() {
                     newsData = newsRepository.getNewsData()
                     lifecycleScope.launch(Dispatchers.IO) {
                         roomRepository.deleteAllNews()
-                        for (item in newsData!!.news!!){
+                        for (item in newsData!!.news!!) {
                             roomRepository.insertNews(item)
                         }
                     }
