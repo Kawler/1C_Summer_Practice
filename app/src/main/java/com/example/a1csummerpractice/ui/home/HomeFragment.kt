@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a1csummerpractice.R
@@ -51,12 +50,15 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val rvNews: RecyclerView = binding.homeRv
-        val tbBtn: Button = binding.homeTbReloadBtn
+        val tbReloadBtn: Button = binding.homeTbReloadBtn
         val tbSpinnerM: Spinner = binding.homeTbSpinnerMonth
         val tbSpinnerY: Spinner = binding.homeTbSpinnerYear
         val tvStatus: TextView = binding.tvHomeStatus
         val toolbar = binding.appBarLayout
         val fab: FloatingActionButton = binding.fabHome
+        val tbAcceptButton: Button = binding.homeTbAcceptBtn
+
+
         val newsDao = NewsDatabase.getDatabase(requireContext()).dao()
         var roomData: List<NewsItemData> = listOf()
         lateinit var roomRepository: NewsRoomRepository
@@ -146,33 +148,48 @@ class HomeFragment : Fragment() {
         rvNews.layoutManager = layManager
         rvNews.adapter = _newsAdapter
 
-        //Логика работы кнопки в тулбаре - обновление и сортировка данных
-        //Хочу добавить отдельную кнопку для сортировки, но сейчас ночь
-        tbBtn.setOnClickListener {
+        //Логика работы кнопок в тулбаре - обновление данных
+        tbReloadBtn.setOnClickListener {
             tvStatus.visibility = View.INVISIBLE
             runBlocking {
-                newsData = null
-                if (roomData == null) {
-                    tvStatus.text = "Сервис новостей не отвечает"
-                    tvStatus.visibility = View.VISIBLE
-                } else {
-                    tvStatus.visibility = View.GONE
-                    //Если есть сохраннёные новости, то они отобразятся
-                    newsData = NewsData(roomData, count = 0, error_msg = "")
-                    Toast.makeText(context, "Загруженны сохранённые новости", Toast.LENGTH_SHORT)
-                        .show()
+                try {
+                    newsData = newsRepository.getNewsData()
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        roomRepository.deleteAllNews()
+                        for (item in newsData!!.news!!){
+                            roomRepository.insertNews(item)
+                        }
+                    }
+                    _newsAdapter.data = newsData!!.news!!
+                    _newsAdapter.notifyDataSetChanged()
+                } catch (e: Exception) {
+                    newsData = null
+                    if (roomData == null) {
+                        tvStatus.text = "Сервис новостей не отвечает"
+                        tvStatus.visibility = View.VISIBLE
+                    } else {
+                        //Если есть сохраннёные новости, то они отобразятся
+                        tvStatus.visibility = View.GONE
+                        newsData = NewsData(roomData, count = 0, error_msg = "")
+                        Toast.makeText(context, "Нет ответа от сервера", Toast.LENGTH_SHORT)
+                            .show()
+                        _newsAdapter.data = newsData!!.news!!
+                        _newsAdapter.notifyDataSetChanged()
+                    }
                 }
             }
+        }
+
+        //Принятие сортировки данных
+        tbAcceptButton.setOnClickListener {
             if (newsData != null && newsData!!.news != null) {
-                _newsAdapter.data = newsData!!.news!!
-                _newsAdapter.notifyDataSetChanged()
-                val newData: NewsData =
-                    setMonthYear(spinnerM = tbSpinnerM, spinnerY = tbSpinnerY, newsData!!)
-                if (newData.count == 0) {
+                val newData =
+                    setMonthYear(spinnerM = tbSpinnerM, spinnerY = tbSpinnerY, newsData!!.news!!)
+                if (newData.isEmpty()) {
                     tvStatus.text = "Нет новостей за выбранный период"
                     tvStatus.visibility = View.VISIBLE
                 }
-                _newsAdapter.data = newData.news!!
+                _newsAdapter.data = newData
                 _newsAdapter.notifyDataSetChanged()
             } else {
                 tvStatus.text = "Сервис новостей не отвечает"
@@ -192,8 +209,8 @@ class HomeFragment : Fragment() {
 fun setMonthYear(
     spinnerM: Spinner,
     spinnerY: Spinner,
-    newsData: NewsData
-): NewsData {
+    newsData: List<NewsItemData>
+): List<NewsItemData> {
     var year: Int? = null
     var month: Int? = null
     when (spinnerM.selectedItemPosition) {
@@ -221,41 +238,38 @@ fun setMonthYear(
 
 //Проводится проверка на выбранные условия в тулбаре и конвертируется время новости, после этого, если
 //новость соответсвует условиям, то она добовляется в отсортированный список новостей
-fun getData(newsData: NewsData, month: Int?, year: Int?): NewsData {
-    val newNewsData: NewsData = newsData
+fun getData(newsData: List<NewsItemData>, month: Int?, year: Int?): List<NewsItemData> {
+    var newData = newsData
     val newsArray: MutableList<NewsItemData> = mutableListOf()
     if (month != null && year == null) {
-        for (item in newsData.news!!) {
+        for (item in newsData) {
             val zdt =
                 Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Etc/UTC"))
             if (zdt.monthValue == month) {
                 newsArray.add(item)
             }
         }
-        newNewsData.news = newsArray
-        newNewsData.count = newsArray.size
+        newData = newsArray
     }
     if (month == null && year != null) {
-        for (item in newsData.news!!) {
+        for (item in newsData) {
             val zdt =
                 Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Etc/UTC"))
             if (zdt.year == year) {
                 newsArray.add(item)
             }
         }
-        newNewsData.news = newsArray
-        newNewsData.count = newsArray.size
+        newData = newsArray
     }
     if (month != null && year != null) {
-        for (item in newsData.news!!) {
+        for (item in newsData!!) {
             val zdt =
                 Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Etc/UTC"))
             if (zdt.monthValue == month && zdt.year == year) {
                 newsArray.add(item)
             }
         }
-        newNewsData.news = newsArray
-        newNewsData.count = newsArray.size
+        newData = newsArray
     }
-    return newNewsData
+    return newData
 }

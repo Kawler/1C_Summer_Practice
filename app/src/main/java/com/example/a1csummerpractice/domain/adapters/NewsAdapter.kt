@@ -31,7 +31,6 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     //Заполняет список новостей
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = data[position]
-        val context = holder.itemView.context
 
         with(holder.binding) {
             rvNewsTitle.text = item.title
