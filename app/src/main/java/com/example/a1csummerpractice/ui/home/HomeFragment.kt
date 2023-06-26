@@ -272,8 +272,9 @@ fun getData(newsData: List<NewsItemData>, month: Int?, year: Int?): List<NewsIte
     if (month != null && year == null) {
         for (item in newsData) {
             val zdt =
-                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Etc/UTC"))
+                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Europe/Moscow"))
             if (zdt.monthValue == month) {
+                Log.i("News",item.news_date_uts+"  ||   "+item.news_date)
                 newsArray.add(item)
             }
         }
@@ -282,7 +283,7 @@ fun getData(newsData: List<NewsItemData>, month: Int?, year: Int?): List<NewsIte
     if (month == null && year != null) {
         for (item in newsData) {
             val zdt =
-                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Etc/UTC"))
+                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Europe/Moscow"))
             if (zdt.year == year) {
                 newsArray.add(item)
             }
@@ -290,9 +291,9 @@ fun getData(newsData: List<NewsItemData>, month: Int?, year: Int?): List<NewsIte
         newData = newsArray
     }
     if (month != null && year != null) {
-        for (item in newsData!!) {
+        for (item in newsData) {
             val zdt =
-                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Etc/UTC"))
+                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Europe/Moscow"))
             if (zdt.monthValue == month && zdt.year == year) {
                 newsArray.add(item)
             }
