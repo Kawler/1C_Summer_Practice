@@ -1,5 +1,7 @@
 package com.example.a1csummerpractice
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -15,14 +17,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sharedPreferences =  getSharedPreferences("app_version",Context.MODE_PRIVATE)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setTheme(R.style.Theme_1CSummerPractice)
         setContentView(binding.root)
-
         setSupportActionBar(binding.appBarMain.toolbar)
 
 
@@ -36,9 +39,10 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        supportActionBar!!.elevation = 0f
         navView.setupWithNavController(navController)
     }
+
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)

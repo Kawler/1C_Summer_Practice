@@ -17,10 +17,7 @@ class CalcAdapter : RecyclerView.Adapter<CalcAdapter.CalcViewHolder>() {
             notifyDataSetChanged()
         }
 
-    class CalcViewHolder(val binding: ItemChartRvBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-    }
+    class CalcViewHolder(val binding: ItemChartRvBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalcViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,38 +34,41 @@ class CalcAdapter : RecyclerView.Adapter<CalcAdapter.CalcViewHolder>() {
         val context = holder.itemView.context
 
         with(holder.binding) {
-            rvItemDate.text =
-                "Дата: " + SimpleDateFormat("dd/MM/yyyy").format(
+            rvItemDate.text = String.format(
+                "Дата: %s", SimpleDateFormat("dd/MM/yyyy").format(
                     Date.from(
                         Instant.ofEpochSecond(
                             item.date
                         )
                     )
                 )
-            rvItemAdditionalPeriod.text = "Доп.период: " + item.additional_period
-            rvItemStartAmount.text = "Задолжность: " + item.start_amount.toString()
-            rvItemEndAmount.text = "Сумма к оплате: " + item.end_amount.toString()
-            rvItemCalculated.text = "Начислено: " + item.calculated.toString()
-            rvItemPayed.text = "Оплачено: " + item.payed.toString()
-            rvItemPenalties.text = "Пенни: " + item.penalties.toString()
-            rvItemUploadTime.text = "Год: " + item.upload_time.toString()
-            rvItemLastPaymentDate.text =
-                "Дата последней оплаты: " + SimpleDateFormat("dd/MM/yyyy").format(
+            )
+            rvItemAdditionalPeriod.text = String.format("Доп. период: %s", item.additional_period)
+            rvItemStartAmount.text = String.format("Задолжность: %s", item.start_amount)
+            rvItemEndAmount.text = String.format("Сумма к оплате: %s", item.end_amount)
+            rvItemCalculated.text = String.format("Начислено: %s", item.calculated)
+            rvItemPayed.text = String.format("Оплачено: %s", item.payed.toString())
+            rvItemPenalties.text = String.format("Пенни: %s", item.penalties.toString())
+            rvItemUploadTime.text = String.format("Год: %s", item.upload_time.toString())
+            rvItemLastPaymentDate.text = String.format(
+                "Дата последней оплаты: %s", SimpleDateFormat("dd/MM/yyyy").format(
                     Date.from(
                         Instant.ofEpochSecond(
                             item.last_payment_date
                         )
                     )
                 )
-            rvItemCurrentDate.text =
-                "Текущая дата: " + SimpleDateFormat("dd/MM/yyyy").format(
+            )
+            rvItemCurrentDate.text = String.format(
+                "Текущая дата: %s", SimpleDateFormat("dd/MM/yyyy").format(
                     Date.from(
                         Instant.ofEpochSecond(
                             item.currentDate
                         )
                     )
                 )
-            rvItemCorrection.text = "Коррекция: " + item.correction.toString()
+            )
+            rvItemCorrection.text = String.format("Коррекция: %s", item.correction.toString())
         }
     }
 }

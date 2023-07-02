@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.a1csummerpractice.databinding.FragmentInfoBinding
 
 class InfoFragment : Fragment() {
@@ -18,13 +17,10 @@ class InfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val infoViewModel =
-            ViewModelProvider(this).get(InfoViewModel::class.java)
 
         _binding = FragmentInfoBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {

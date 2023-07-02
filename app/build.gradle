@@ -14,7 +14,7 @@ android {
         minSdk 26
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -87,6 +87,9 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.5.2"
+
+    //Material Tap Target Prompt
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:3.3.2'
 }
 
 kapt {

@@ -1,5 +1,6 @@
 package com.example.a1csummerpractice.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,16 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.Spinner
-import android.widget.SpinnerAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.a1csummerpractice.R
 import com.example.a1csummerpractice.data.NewsDatabase
 import com.example.a1csummerpractice.data.repository.NewsRepository
@@ -26,10 +23,10 @@ import com.example.a1csummerpractice.domain.adapters.NewsAdapter
 import com.example.a1csummerpractice.domain.newsdt.NewsData
 import com.example.a1csummerpractice.domain.newsdt.NewsItemData
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.time.Instant
 import java.time.ZoneId
 import kotlin.math.abs
@@ -42,24 +39,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        val rvNews: RecyclerView = binding.homeRv
-        val tbReloadBtn: Button = binding.homeTbReloadBtn
-        val tbSpinnerM: Spinner = binding.homeTbSpinnerMonth
-        val tbSpinnerY: Spinner = binding.homeTbSpinnerYear
-        val tvStatus: TextView = binding.tvHomeStatus
-        val toolbar = binding.appBarLayout
-        val fab: FloatingActionButton = binding.fabHome
-        val tbAcceptButton: Button = binding.homeTbAcceptBtn
-
 
         val newsDao = NewsDatabase.getDatabase(requireContext()).dao()
         var roomData: List<NewsItemData> = listOf()
@@ -72,60 +54,25 @@ class HomeFragment : Fragment() {
         }
 
         //Управление кнопкой в зависимости от прокрутки тулбара
-        toolbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener(
-            fun(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                if (abs(verticalOffset) == appBarLayout.totalScrollRange) {
-                    //Collapsed
-                    fab.visibility = View.VISIBLE
-                } else if (verticalOffset == 0) {
-                    //Extended
-                    fab.visibility = View.GONE
-                } else {
-                    //Transition
-                    fab.visibility = View.GONE
-                }
+        binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener(fun(
+            appBarLayout: AppBarLayout,
+            verticalOffset: Int
+        ) {
+            if (abs(verticalOffset) == appBarLayout.totalScrollRange) {
+                //Collapsed
+                binding.fabHome.visibility = View.VISIBLE
+            } else if (verticalOffset == 0) {
+                //Extended
+                binding.fabHome.visibility = View.GONE
+            } else {
+                //Transition
+                binding.fabHome.visibility = View.GONE
             }
-        ))
+        }))
 
-        fab.setOnClickListener {
-            toolbar.setExpanded(true)
+        binding.fabHome.setOnClickListener {
+            binding.appBarLayout.setExpanded(true)
         }
-
-        //Адаптеры для спинеров
-        val spinMAdapter: SpinnerAdapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.spinner_months,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(R.layout.home_dropdown_spinner_menu)
-            tbSpinnerM.adapter = adapter
-        }
-        val spinYAdapter: SpinnerAdapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.spinner_years,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(R.layout.home_dropdown_spinner_menu)
-            tbSpinnerY.adapter = adapter
-        }
-
-        //Изменить цвет выбраного итема в спиннере
-        val listener: AdapterView.OnItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    if (view != null)
-                        (parent.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.black))
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-        tbSpinnerM.onItemSelectedListener = listener
-        tbSpinnerY.onItemSelectedListener = listener
 
         //Получение новостей
         var newsData: NewsData?
@@ -142,11 +89,11 @@ class HomeFragment : Fragment() {
             } catch (e: Exception) {
                 newsData = null
                 if (roomData == null) {
-                    tvStatus.text = "Сервис новостей не отвечает"
-                    tvStatus.visibility = View.VISIBLE
+                    binding.tvHomeStatus.text = "Сервис новостей не отвечает"
+                    binding.tvHomeStatus.visibility = View.VISIBLE
                 } else {
                     //Если есть сохраннёные новости, то они отобразятся
-                    tvStatus.visibility = View.GONE
+                    binding.tvHomeStatus.visibility = View.GONE
                     newsData = NewsData(roomData, count = 0, error_msg = "")
                     Toast.makeText(context, "Загруженны сохранённые новости", Toast.LENGTH_SHORT)
                         .show()
@@ -157,24 +104,112 @@ class HomeFragment : Fragment() {
         if (newsData != null) {
             if (newsData!!.news?.isEmpty() == true) {
                 Log.i("API Error mesage", newsData!!.error_msg)
-                tvStatus.text = "Не удалось получить новости"
-                tvStatus.visibility = View.VISIBLE
+                binding.tvHomeStatus.text = "Не удалось получить новости"
+                binding.tvHomeStatus.visibility = View.VISIBLE
             }
         }
+
+        //Адаптеры для спинеров
+        val months: MutableList<Any> = mutableListOf(
+            "  ",
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"
+        )
+        val spinMAdapter = object :
+            ArrayAdapter<Any>(requireContext(), android.R.layout.simple_spinner_item, months) {
+            //Изменяем цвет выбранного элемента в списке
+            override fun getDropDownView(
+                position: Int,
+                convertView: View?,
+                parent: ViewGroup
+            ): View {
+                return super.getDropDownView(position, convertView, parent).also { view ->
+                    if (position == binding.homeTbSpinnerMonth.selectedItemPosition)
+                        view.setBackgroundColor(resources.getColor(R.color.light_cyan))
+                }
+            }
+        }.also { adapter ->
+            adapter.setDropDownViewResource(R.layout.home_dropdown_spinner_menu)
+            binding.homeTbSpinnerMonth.adapter = adapter
+        }
+        val years: MutableList<Any> = mutableListOf()
+        years.add("  ")
+        if (newsData != null) {
+            if (newsData!!.news?.isEmpty() == false) {
+                years.add(
+                    Instant.ofEpochSecond(newsData!!.news!![0].news_date_uts.toLong())
+                        .atZone(ZoneId.of("Europe/Moscow")).year
+                )
+                for (item in newsData!!.news!!) {
+                    years.add(
+                        Instant.ofEpochSecond(item.news_date_uts.toLong())
+                            .atZone(ZoneId.of("Europe/Moscow")).year
+                    )
+                }
+            }
+        }
+        val spinYAdapter = object :
+            ArrayAdapter<Any>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                years.distinct()
+            ) {
+            //Изменяем цвет выбранного элемента в списке
+            override fun getDropDownView(
+                position: Int,
+                convertView: View?,
+                parent: ViewGroup
+            ): View {
+                return super.getDropDownView(position, convertView, parent).also { view ->
+                    if (position == binding.homeTbSpinnerMonth.selectedItemPosition)
+                        view.setBackgroundColor(resources.getColor(R.color.light_cyan))
+                }
+            }
+        }.also { adapter ->
+            adapter.setDropDownViewResource(R.layout.home_dropdown_spinner_menu)
+            binding.homeTbSpinnerYear.adapter = adapter
+        }
+
+
+        //Изменить цвет выбранного итема в спиннере
+        val listener: AdapterView.OnItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>, view: View?, position: Int, id: Long
+                ) {
+                    if (view != null) (parent.getChildAt(0) as TextView).setTextColor(
+                        resources.getColor(
+                            R.color.black
+                        )
+                    )
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+        binding.homeTbSpinnerMonth.onItemSelectedListener = listener
+        binding.homeTbSpinnerYear.onItemSelectedListener = listener
 
         //Заполнение списка новостей
         val layManager = LinearLayoutManager(context)
         _newsAdapter = NewsAdapter()
-        if (newsData != null)
-            if (newsData!!.news != null)
-                _newsAdapter.data = newsData!!.news!!
+        if (newsData != null) if (newsData!!.news != null) _newsAdapter.data = newsData!!.news!!
 
 
-        rvNews.layoutManager = layManager
-        rvNews.adapter = _newsAdapter
+        binding.homeRv.layoutManager = layManager
+        binding.homeRv.adapter = _newsAdapter
         //Логика работы кнопок в тулбаре - обновление данных
-        tbReloadBtn.setOnClickListener {
-            tvStatus.visibility = View.INVISIBLE
+        binding.homeTbReloadBtn.setOnClickListener {
+            binding.tvHomeStatus.visibility = View.INVISIBLE
             runBlocking {
                 try {
                     newsData = newsRepository.getNewsData()
@@ -189,43 +224,138 @@ class HomeFragment : Fragment() {
                 } catch (e: Exception) {
                     newsData = null
                     if (roomData == null) {
-                        tvStatus.text = "Сервис новостей не отвечает"
-                        tvStatus.visibility = View.VISIBLE
+                        binding.tvHomeStatus.text = "Сервис новостей не отвечает"
+                        binding.tvHomeStatus.visibility = View.VISIBLE
                     } else {
                         //Если есть сохраннёные новости, то они отобразятся
-                        tvStatus.visibility = View.GONE
+                        binding.tvHomeStatus.visibility = View.GONE
                         newsData = NewsData(roomData, count = 0, error_msg = "")
-                        Toast.makeText(context, "Нет ответа от сервера", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context, "Нет ответа от сервера", Toast.LENGTH_SHORT).show()
                         _newsAdapter.data = newsData!!.news!!
                         _newsAdapter.notifyDataSetChanged()
                     }
                 }
-                tbSpinnerM.setSelection(0)
-                tbSpinnerY.setSelection(0)
+                binding.homeTbSpinnerMonth.setSelection(0)
+                binding.homeTbSpinnerYear.setSelection(0)
             }
         }
 
         //Принятие сортировки данных
-        tbAcceptButton.setOnClickListener {
+        binding.homeTbAcceptBtn.setOnClickListener {
             if (newsData != null && newsData!!.news != null) {
                 val newData =
-                    setMonthYear(spinnerM = tbSpinnerM, spinnerY = tbSpinnerY, newsData!!.news!!)
+                    setMonthYear(
+                        spinnerM = binding.homeTbSpinnerMonth,
+                        spinnerY = binding.homeTbSpinnerYear,
+                        newsData!!.news!!
+                    )
                 if (newData.isEmpty()) {
-                    tvStatus.text = "Нет новостей за выбранный период"
-                    tvStatus.visibility = View.VISIBLE
+                    binding.tvHomeStatus.text = "Нет новостей за выбранный период"
+                    binding.tvHomeStatus.visibility = View.VISIBLE
                 } else {
-                    tvStatus.visibility = View.GONE
+                    binding.tvHomeStatus.visibility = View.GONE
                 }
                 _newsAdapter.data = newData
                 _newsAdapter.notifyDataSetChanged()
             } else {
-                tvStatus.text = "Сервис новостей не отвечает"
-                tvStatus.visibility = View.VISIBLE
+                binding.tvHomeStatus.text = "Сервис новостей не отвечает"
+                binding.tvHomeStatus.visibility = View.VISIBLE
             }
         }
 
-        return root
+        //Получаем преференс для версии приложения и первого запуска
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("app_version", Context.MODE_PRIVATE)
+        val sharedEditor = sharedPreferences.edit()
+
+        //Проверяем совпадение текущей версии приложения со старой и является ли это первым запуском
+        if (sharedPreferences.getString(
+                "app_version", "version"
+            ) != context?.packageManager?.getPackageInfo(
+                requireContext().packageName, 0
+            )?.versionName || sharedPreferences.getBoolean("first_launch", true)
+        ) {
+            //Уточняем версию приложения
+            sharedEditor.putString(
+                "app_version", context?.packageManager?.getPackageInfo(
+                    requireContext().packageName, 0
+                )?.versionName
+            ).apply()
+            sharedEditor.putBoolean("first_launch", false).apply()
+
+            //Обязательно нужно вызывать через post, иначе будет NULL. Вызов без post работает только
+            //в activity. Почему? - не знаю, но до меня это доходило долго
+            binding.homeTbSpinnerMonth.post {
+                MaterialTapTargetPrompt.Builder(this).setTarget(binding.homeTbSpinnerMonth)
+                    .setPrimaryText("Поле выбора месяца")
+                    .setSecondaryText("Используется для сортировки новостей по месяцам")
+                    .setBackButtonDismissEnabled(true)
+                    .setFocalColour(resources.getColor(R.color.light_cyan))
+                    .setBackgroundColour(resources.getColor(R.color.dark_cyan))
+                    .setPromptStateChangeListener { promt, state ->
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                            MaterialTapTargetPrompt.Builder(this)
+                                .setTarget(binding.homeTbSpinnerYear)
+                                .setPrimaryText("Поле выбора года")
+                                .setSecondaryText("Используется для сортировки новостей по месяцам годам")
+                                .setBackButtonDismissEnabled(true)
+                                .setBackgroundColour(resources.getColor(R.color.dark_cyan))
+                                .setFocalColour(resources.getColor(R.color.light_cyan))
+                                .setPromptStateChangeListener { promt, state ->
+                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                                        MaterialTapTargetPrompt.Builder(this)
+                                            .setTarget(binding.homeTbAcceptBtn)
+                                            .setPrimaryText("Кнопка принятия параметров сортировки")
+                                            .setSecondaryText("Нажмите, чтобы отсортировать новости")
+                                            .setBackButtonDismissEnabled(true)
+                                            .setBackgroundColour(resources.getColor(R.color.dark_cyan))
+                                            .setFocalColour(resources.getColor(R.color.light_cyan))
+                                            .setPromptStateChangeListener { promt, state ->
+                                                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                                                    MaterialTapTargetPrompt.Builder(this)
+                                                        .setTarget(binding.homeTbReloadBtn)
+                                                        .setPrimaryText("Кнопка обновление новостей с сервера")
+                                                        .setSecondaryText("Нажмите, чтобы обновить новости")
+                                                        .setBackButtonDismissEnabled(true)
+                                                        .setBackgroundColour(resources.getColor(R.color.dark_cyan))
+                                                        .setFocalColour(resources.getColor(R.color.light_cyan))
+                                                        .setPromptStateChangeListener { promt, state ->
+                                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                                                                binding.appBarLayout.setExpanded(
+                                                                    false
+                                                                )
+                                                                MaterialTapTargetPrompt.Builder(this)
+                                                                    .setTarget(binding.fabHome)
+                                                                    .setPrimaryText("Кнопка для открытия поля сортировки")
+                                                                    .setSecondaryText("Нажмите, чтобы открыть поле для сортировки")
+                                                                    .setBackButtonDismissEnabled(
+                                                                        true
+                                                                    )
+                                                                    .setFocalColour(
+                                                                        resources.getColor(
+                                                                            R.color.light_cyan
+                                                                        )
+                                                                    )
+                                                                    .setBackgroundColour(
+                                                                        resources.getColor(
+                                                                            R.color.dark_cyan
+                                                                        )
+                                                                    )
+                                                                    .show()
+                                                            }
+                                                        }.show()
+                                                }
+                                            }.show()
+                                    }
+                                }.show()
+                        }
+                    }.show()
+            }
+        }
+
+
+
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -235,11 +365,8 @@ class HomeFragment : Fragment() {
 }
 
 fun setMonthYear(
-    spinnerM: Spinner,
-    spinnerY: Spinner,
-    newsData: List<NewsItemData>
+    spinnerM: Spinner, spinnerY: Spinner, newsData: List<NewsItemData>
 ): List<NewsItemData> {
-    var year: Int? = null
     var month: Int? = null
     when (spinnerM.selectedItemPosition) {
         1 -> month = 1
@@ -255,13 +382,7 @@ fun setMonthYear(
         11 -> month = 11
         12 -> month = 12
     }
-    when (spinnerY.selectedItemPosition) {
-        1 -> year = 2020
-        2 -> year = 2021
-        3 -> year = 2022
-        4 -> year = 2023
-    }
-    return getData(newsData, month, year)
+    return getData(newsData, month, spinnerY.selectedItem as Int?)
 }
 
 //Проводится проверка на выбранные условия в тулбаре и конвертируется время новости, после этого, если
@@ -271,10 +392,10 @@ fun getData(newsData: List<NewsItemData>, month: Int?, year: Int?): List<NewsIte
     val newsArray: MutableList<NewsItemData> = mutableListOf()
     if (month != null && year == null) {
         for (item in newsData) {
-            val zdt =
-                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Europe/Moscow"))
+            val zdt = Instant.ofEpochSecond(item.news_date_uts.toLong())
+                .atZone(ZoneId.of("Europe/Moscow"))
             if (zdt.monthValue == month) {
-                Log.i("News",item.news_date_uts+"  ||   "+item.news_date)
+                Log.i("News", item.news_date_uts + "  ||   " + item.news_date)
                 newsArray.add(item)
             }
         }
@@ -282,8 +403,8 @@ fun getData(newsData: List<NewsItemData>, month: Int?, year: Int?): List<NewsIte
     }
     if (month == null && year != null) {
         for (item in newsData) {
-            val zdt =
-                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Europe/Moscow"))
+            val zdt = Instant.ofEpochSecond(item.news_date_uts.toLong())
+                .atZone(ZoneId.of("Europe/Moscow"))
             if (zdt.year == year) {
                 newsArray.add(item)
             }
@@ -292,8 +413,8 @@ fun getData(newsData: List<NewsItemData>, month: Int?, year: Int?): List<NewsIte
     }
     if (month != null && year != null) {
         for (item in newsData) {
-            val zdt =
-                Instant.ofEpochSecond(item.news_date_uts.toLong()).atZone(ZoneId.of("Europe/Moscow"))
+            val zdt = Instant.ofEpochSecond(item.news_date_uts.toLong())
+                .atZone(ZoneId.of("Europe/Moscow"))
             if (zdt.monthValue == month && zdt.year == year) {
                 newsArray.add(item)
             }
