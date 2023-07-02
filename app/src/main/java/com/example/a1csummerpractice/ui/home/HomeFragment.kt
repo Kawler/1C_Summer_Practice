@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
         var roomData: List<NewsItemData> = listOf()
         lateinit var roomRepository: NewsRoomRepository
 
-        //Берём данные из Бд, пока на всякий случай
+        //Берём данные из Бд в фоне
         lifecycleScope.launch(Dispatchers.IO) {
             roomRepository = NewsRoomRepository(newsDao)
             roomData = roomRepository.readAllData
@@ -55,8 +55,7 @@ class HomeFragment : Fragment() {
 
         //Управление кнопкой в зависимости от прокрутки тулбара
         binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener(fun(
-            appBarLayout: AppBarLayout,
-            verticalOffset: Int
+            appBarLayout: AppBarLayout, verticalOffset: Int
         ) {
             if (abs(verticalOffset) == appBarLayout.totalScrollRange) {
                 //Collapsed
@@ -109,7 +108,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        //Адаптеры для спинеров
+        //Спинер с месяцами
         val months: MutableList<Any> = mutableListOf(
             "  ",
             "Январь",
@@ -129,19 +128,20 @@ class HomeFragment : Fragment() {
             ArrayAdapter<Any>(requireContext(), android.R.layout.simple_spinner_item, months) {
             //Изменяем цвет выбранного элемента в списке
             override fun getDropDownView(
-                position: Int,
-                convertView: View?,
-                parent: ViewGroup
+                position: Int, convertView: View?, parent: ViewGroup
             ): View {
                 return super.getDropDownView(position, convertView, parent).also { view ->
-                    if (position == binding.homeTbSpinnerMonth.selectedItemPosition)
-                        view.setBackgroundColor(resources.getColor(R.color.light_cyan))
+                    if (position == binding.homeTbSpinnerMonth.selectedItemPosition) view.setBackgroundColor(
+                        resources.getColor(R.color.light_cyan)
+                    )
                 }
             }
         }.also { adapter ->
             adapter.setDropDownViewResource(R.layout.home_dropdown_spinner_menu)
             binding.homeTbSpinnerMonth.adapter = adapter
         }
+
+        //Заполняем массив с доступными для сортировки годами и создаём спинер с годами
         val years: MutableList<Any> = mutableListOf()
         years.add("  ")
         if (newsData != null) {
@@ -158,21 +158,17 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        val spinYAdapter = object :
-            ArrayAdapter<Any>(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                years.distinct()
-            ) {
+        val spinYAdapter = object : ArrayAdapter<Any>(
+            requireContext(), android.R.layout.simple_spinner_item, years.distinct()
+        ) {
             //Изменяем цвет выбранного элемента в списке
             override fun getDropDownView(
-                position: Int,
-                convertView: View?,
-                parent: ViewGroup
+                position: Int, convertView: View?, parent: ViewGroup
             ): View {
                 return super.getDropDownView(position, convertView, parent).also { view ->
-                    if (position == binding.homeTbSpinnerMonth.selectedItemPosition)
-                        view.setBackgroundColor(resources.getColor(R.color.light_cyan))
+                    if (position == binding.homeTbSpinnerMonth.selectedItemPosition) view.setBackgroundColor(
+                        resources.getColor(R.color.light_cyan)
+                    )
                 }
             }
         }.also { adapter ->
@@ -189,7 +185,7 @@ class HomeFragment : Fragment() {
                 ) {
                     if (view != null) (parent.getChildAt(0) as TextView).setTextColor(
                         resources.getColor(
-                            R.color.black
+                            R.color.dark_cyan
                         )
                     )
                 }
@@ -243,12 +239,11 @@ class HomeFragment : Fragment() {
         //Принятие сортировки данных
         binding.homeTbAcceptBtn.setOnClickListener {
             if (newsData != null && newsData!!.news != null) {
-                val newData =
-                    setMonthYear(
-                        spinnerM = binding.homeTbSpinnerMonth,
-                        spinnerY = binding.homeTbSpinnerYear,
-                        newsData!!.news!!
-                    )
+                val newData = setMonthYear(
+                    spinnerM = binding.homeTbSpinnerMonth,
+                    spinnerY = binding.homeTbSpinnerYear,
+                    newsData!!.news!!
+                )
                 if (newData.isEmpty()) {
                     binding.tvHomeStatus.text = "Нет новостей за выбранный период"
                     binding.tvHomeStatus.visibility = View.VISIBLE
@@ -330,18 +325,15 @@ class HomeFragment : Fragment() {
                                                                     .setSecondaryText("Нажмите, чтобы открыть поле для сортировки")
                                                                     .setBackButtonDismissEnabled(
                                                                         true
-                                                                    )
-                                                                    .setFocalColour(
+                                                                    ).setFocalColour(
                                                                         resources.getColor(
                                                                             R.color.light_cyan
                                                                         )
-                                                                    )
-                                                                    .setBackgroundColour(
+                                                                    ).setBackgroundColour(
                                                                         resources.getColor(
                                                                             R.color.dark_cyan
                                                                         )
-                                                                    )
-                                                                    .show()
+                                                                    ).show()
                                                             }
                                                         }.show()
                                                 }
@@ -352,9 +344,6 @@ class HomeFragment : Fragment() {
                     }.show()
             }
         }
-
-
-
         return binding.root
     }
 
