@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "709775318860",
+    "project_id": "c-summer-practice",
+    "storage_bucket": "c-summer-practice.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709775318860:android:3768262c69ab39fa9279e9",
+        "android_client_info": {
+          "package_name": "com.example.a1csummerpractice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709775318860-2fk5o88ftt6b5ohj9sfkojpqmk0jc5qi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz9m3IYhMycRnfNi_UxJksWeHEwIiFJBE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709775318860-2fk5o88ftt6b5ohj9sfkojpqmk0jc5qi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

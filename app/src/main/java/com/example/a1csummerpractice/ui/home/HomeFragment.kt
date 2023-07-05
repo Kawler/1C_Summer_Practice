@@ -1,6 +1,7 @@
 package com.example.a1csummerpractice.ui.home
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,9 @@ import com.example.a1csummerpractice.domain.adapters.NewsAdapter
 import com.example.a1csummerpractice.domain.newsdt.NewsData
 import com.example.a1csummerpractice.domain.newsdt.NewsItemData
 import com.google.android.material.appbar.AppBarLayout
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -51,6 +55,23 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             roomRepository = NewsRoomRepository(newsDao)
             roomData = roomRepository.readAllData
+        }
+
+        //Firebase
+        val remoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 10
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.fetchAndActivate().addOnCompleteListener(requireActivity()) { task ->
+            if (task.isSuccessful) {
+                binding.tbHome.post {
+                    binding.tbHome.background.setTint(Color.parseColor(remoteConfig.getString("toolbar_color")))
+                }
+                binding.fabHome.post {
+                    binding.fabHome.background.setTint(Color.parseColor(remoteConfig.getString("toolbar_color")))
+                }
+            }
         }
 
         //Управление кнопкой в зависимости от прокрутки тулбара
@@ -143,7 +164,7 @@ class HomeFragment : Fragment() {
 
         //Заполняем массив с доступными для сортировки годами и создаём спинер с годами
         val years: MutableList<Any> = mutableListOf()
-        years.add("  ")
+        years.add("")
         if (newsData != null) {
             if (newsData!!.news?.isEmpty() == false) {
                 years.add(
@@ -278,8 +299,6 @@ class HomeFragment : Fragment() {
             ).apply()
             sharedEditor.putBoolean("first_launch", false).apply()
 
-            //Обязательно нужно вызывать через post, иначе будет NULL. Вызов без post работает только
-            //в activity. Почему? - не знаю, но до меня это доходило долго
             binding.homeTbSpinnerMonth.post {
                 MaterialTapTargetPrompt.Builder(this).setTarget(binding.homeTbSpinnerMonth)
                     .setPrimaryText("Поле выбора месяца")
@@ -371,7 +390,11 @@ fun setMonthYear(
         11 -> month = 11
         12 -> month = 12
     }
-    return getData(newsData, month, spinnerY.selectedItem as Int?)
+    return if (spinnerY.selectedItemPosition != 0) {
+        getData(newsData, month, spinnerY.selectedItem as Int?)
+    } else {
+        getData(newsData, month, null)
+    }
 }
 
 //Проводится проверка на выбранные условия в тулбаре и конвертируется время новости, после этого, если
