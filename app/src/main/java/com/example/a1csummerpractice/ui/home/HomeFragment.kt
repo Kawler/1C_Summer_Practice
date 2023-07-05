@@ -187,7 +187,7 @@ class HomeFragment : Fragment() {
                 position: Int, convertView: View?, parent: ViewGroup
             ): View {
                 return super.getDropDownView(position, convertView, parent).also { view ->
-                    if (position == binding.homeTbSpinnerMonth.selectedItemPosition) view.setBackgroundColor(
+                    if (position == binding.homeTbSpinnerYear.selectedItemPosition) view.setBackgroundColor(
                         resources.getColor(R.color.light_cyan)
                     )
                 }
